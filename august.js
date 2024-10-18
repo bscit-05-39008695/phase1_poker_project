@@ -1,152 +1,94 @@
-class Card {
-    constructor(rank, suit) {
-        this.rank = rank;
-        this.suit = suit;
-    }
+const step5 = document.getElementById("step5");
+const canvas = document.getElementById('pokerCanvas');
+const ctx = canvas.getContext('2d');
 
-    toString() {
-        return `${this.rank}${this.suit}`;
-    }
+const CARD_WIDTH = 50;
+const CARD_HEIGHT = 70;
+const TABLE_CENTER_X = 400;
+const TABLE_CENTER_Y = 300;
+const TABLE_RADIUS_X = 350;
+const TABLE_RADIUS_Y = 250;
+
+function drawCard(x, y, card) {
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.fillRect(x, y, CARD_WIDTH, CARD_HEIGHT);
+    ctx.strokeRect(x, y, CARD_WIDTH, CARD_HEIGHT);
+
+    ctx.fillStyle = card.suit === '♥' || card.suit === '♦' ? 'red' : 'black';
+    ctx.font = '20px Arial';
+    ctx.fillText(card.value, x + 5, y + 20);
+    ctx.fillText(card.suit, x + 5, y + 45);
 }
 
-class Player {
-    constructor(name, position) {
-        this.name = name;
-        this.hand = [];
-        this.folded = false;
-        this.position = position;
-        this.revealed = false;
-    }
+function drawTable() {
+    ctx.fillStyle = 'green';
+    ctx.beginPath();
+    ctx.ellipse(TABLE_CENTER_X, TABLE_CENTER_Y, TABLE_RADIUS_X, TABLE_RADIUS_Y, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'brown';
+    ctx.lineWidth = 10;
+    ctx.stroke();
 }
 
-class PokerGame {
-    constructor(canvas) {
-        this.canvas = canvas;
-        this.ctx = canvas.getContext('2d');
-        this.players = [
-            new Player("Player 1", {x: 350, y: 500}),
-            new Player("Player 2", {x: 100, y: 300}),
-            new Player("Player 3", {x: 350, y: 100}),
-            new Player("Player 4", {x: 600, y: 300})
-        ];
-        this.communityCards = [];
-        this.deck = this.createDeck();
-        this.dealCards();
-        this.currentPlayerIndex = 0;
-        this.winner = null;
-    }
-
-    createDeck() {
-        const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-        const suits = ['♠', '♣', '♥', '♦'];
-        let deck = [];
-        for (let suit of suits) {
-            for (let rank of ranks) {
-                deck.push(new Card(rank, suit));
-            }
-        }
-        return this.shuffle(deck);
-    }
-
-    shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
-    dealCards() {
-        for (let i = 0; i < 2; i++) {
-            for (let player of this.players) {
-                player.hand.push(this.deck.pop());
-            }
-        }
-        for (let i = 0; i < 5; i++) {
-            this.communityCards.push(this.deck.pop());
-        }
-    }
-
-    drawCard(card, x, y, faceDown = false) {
-        this.ctx.fillStyle = faceDown ? 'blue' : 'white';
-        this.ctx.fillRect(x, y, 50, 70);
-        this.ctx.strokeStyle = 'black';
-        this.ctx.strokeRect(x, y, 50, 70);
-        if (!faceDown) {
-            this.ctx.fillStyle = (card.suit === '♥' || card.suit === '♦') ? 'red' : 'black';
-            this.ctx.font = '20px Arial';
-            this.ctx.fillText(card.toString(), x + 5, y + 30);
-        }
-    }
-
-    drawPlayer(player) {
-        this.ctx.fillStyle = 'black';
-        this.ctx.font = '16px Arial';
-        this.ctx.fillText(player.name, player.position.x - 30, player.position.y - 40);
-        if (player.folded) {
-            this.ctx.fillStyle = 'gray';
-            this.ctx.fillRect(player.position.x - 25, player.position.y - 35, 50, 70);
-        } else {
-            this.drawCard(player.hand[0], player.position.x - 55, player.position.y - 35, !player.revealed);
-            this.drawCard(player.hand[1], player.position.x + 5, player.position.y - 35, !player.revealed);
-        }
-    }
-
-    drawCommunityCards() {
-        for (let i = 0; i < this.communityCards.length; i++) {
-            this.drawCard(this.communityCards[i], 250 + i * 60, 250);
-        }
-    }
-
-    draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawCommunityCards();
-        for (let player of this.players) {
-            this.drawPlayer(player);
-        }
-        if (this.winner) {
-            this.ctx.fillStyle = 'green';
-            this.ctx.font = '24px Arial';
-            this.ctx.fillText(`Winner: ${this.winner.name}`, 300, 50);
-        }
-    }
-
-    revealNextHand() {
-        while (this.currentPlayerIndex < this.players.length) {
-            let player = this.players[this.currentPlayerIndex];
-            this.currentPlayerIndex++;
-            if (!player.folded) {
-                player.revealed = true;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    determineWinner() {
-        const activePlayers = this.players.filter(player => !player.folded);
-        this.winner = activePlayers[Math.floor(Math.random() * activePlayers.length)];
-    }
-
-    animateShowdown() {
-        if (this.revealNextHand()) {
-            this.draw();
-            setTimeout(() => this.animateShowdown(), 1000);
-        } else if (!this.winner) {
-            this.determineWinner();
-            this.draw();
-        }
-    }
+function drawCommunityCards(cards) {
+    cards.forEach((card, index) => {
+        drawCard(TABLE_CENTER_X - 150 + index * 60, TABLE_CENTER_Y - 35, card);
+    });
 }
 
-window.onload = () => {
-    const canvas = document.getElementById('pokerCanvas');
-    const game = new PokerGame(canvas);
-    
-    // Simulate some players folding
-    game.players[1].folded = true;
+function drawPlayerCards(playerIndex, cards) {
+    const angle = (playerIndex / 4) * 2 * Math.PI - Math.PI / 2;
+    const x = TABLE_CENTER_X + Math.cos(angle) * TABLE_RADIUS_X * 0.7;
+    const y = TABLE_CENTER_Y + Math.sin(angle) * TABLE_RADIUS_Y * 0.7;
 
-    // Start the animated showdown
-    game.draw();
-    setTimeout(() => game.animateShowdown(), 1000);
-};
+    drawCard(x - 30, y, cards[0]);
+    drawCard(x + 30, y, cards[1]);
+
+    ctx.fillStyle = 'white';
+    ctx.font = '20px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(`Player ${playerIndex + 1}`, x, y + 100);
+}
+
+function animateShowdown() {
+    const communityCards = [
+        {value: 'A', suit: '♠'},
+        {value: 'K', suit: '♥'},
+        {value: 'Q', suit: '♦'},
+        {value: 'J', suit: '♣'},
+        {value: '10', suit: '♠'}
+    ];
+
+    const playerCards = [
+        [{value: 'A', suit: '♥'}, {value: 'K', suit: '♠'}],
+        [{value: 'Q', suit: '♣'}, {value: 'J', suit: '♦'}],
+        [{value: '10', suit: '♥'}, {value: '9', suit: '♥'}],
+        [{value: '2', suit: '♦'}, {value: '7', suit: '♣'}]
+    ];
+
+    let frame = 0;
+    const totalFrames = 120; // 2 seconds at 60 fps
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawTable();
+        drawCommunityCards(communityCards);
+
+        const revealedPlayers = Math.min(4, Math.floor((frame + 1) / 30) + 1);
+        for (let i = 0; i < revealedPlayers; i++) {
+            drawPlayerCards(i, playerCards[i]);
+        }
+
+        frame++;
+        if (frame < totalFrames) {
+            requestAnimationFrame(animate);
+        }
+    }
+
+    animate();
+}
+
+// Start the animation
+animateShowdown();
