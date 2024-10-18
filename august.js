@@ -1,25 +1,36 @@
-const step5 = document.getElementById("step5");
 const canvas = document.getElementById('pokerCanvas5');
 const ctx = canvas.getContext('2d');
 
 const CARD_WIDTH = 50;
 const CARD_HEIGHT = 70;
 const TABLE_CENTER_X = 400;
-const TABLE_CENTER_Y = 300;
+const TABLE_CENTER_Y = 350;
 const TABLE_RADIUS_X = 350;
-const TABLE_RADIUS_Y = 250;
+const TABLE_RADIUS_Y = 350;
 
-function drawCard(x, y, card) {
+function drawCard(x, y, card, faceUp = true, revealProgress = 1) {
+    ctx.save();
+    ctx.translate(x + CARD_WIDTH / 2, y + CARD_HEIGHT / 2);
+    ctx.rotate((1 - revealProgress) * Math.PI);
+    ctx.translate(-CARD_WIDTH / 2, -CARD_HEIGHT / 2);
+
     ctx.fillStyle = 'white';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 2;
-    ctx.fillRect(x, y, CARD_WIDTH, CARD_HEIGHT);
-    ctx.strokeRect(x, y, CARD_WIDTH, CARD_HEIGHT);
+    ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
+    ctx.strokeRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 
-    ctx.fillStyle = card.suit === '♥' || card.suit === '♦' ? 'red' : 'black';
-    ctx.font = '20px Arial';
-    ctx.fillText(card.value, x + 5, y + 20);
-    ctx.fillText(card.suit, x + 5, y + 45);
+    if (faceUp && revealProgress > 0.5) {
+        ctx.fillStyle = card.suit === '♥' || card.suit === '♦' ? 'red' : 'black';
+        ctx.font = '20px Arial';
+        ctx.fillText(card.value, 5, 20);
+        ctx.fillText(card.suit, 5, 45);
+    } else {
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(5, 5, CARD_WIDTH - 10, CARD_HEIGHT - 10);
+    }
+
+    ctx.restore();
 }
 
 function drawTable() {
@@ -38,18 +49,32 @@ function drawCommunityCards(cards) {
     });
 }
 
-function drawPlayerCards(playerIndex, cards) {
-    const angle = (playerIndex / 4) * 2 * Math.PI - Math.PI / 2;
+function drawPlayer(playerIndex, cards, angle, revealProgress) {
     const x = TABLE_CENTER_X + Math.cos(angle) * TABLE_RADIUS_X * 0.7;
     const y = TABLE_CENTER_Y + Math.sin(angle) * TABLE_RADIUS_Y * 0.7;
 
-    drawCard(x - 30, y, cards[0]);
-    drawCard(x + 30, y, cards[1]);
+    drawCard(x - 30, y, cards[0], true, revealProgress);
+    drawCard(x + 30, y, cards[1], true, revealProgress);
 
     ctx.fillStyle = 'white';
     ctx.font = '20px Arial';
     ctx.textAlign = 'center';
     ctx.fillText(`Player ${playerIndex + 1}`, x, y + 100);
+}
+
+function drawDealer() {
+    const dealerX = TABLE_CENTER_X;
+    const dealerY = TABLE_CENTER_Y - TABLE_RADIUS_Y * 0.9;
+
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(dealerX, dealerY, 30, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = 'black';
+    ctx.font = '20px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('D', dealerX, dealerY + 7);
 }
 
 function animateShowdown() {
@@ -69,16 +94,28 @@ function animateShowdown() {
     ];
 
     let frame = 0;
-    const totalFrames = 120; // 2 seconds at 60 fps
+    const totalFrames = 300; // 5 seconds at 60 fps
+    const revealFrames = 60; // 1 second for each player's reveal
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawTable();
         drawCommunityCards(communityCards);
+        drawDealer();
 
-        const revealedPlayers = Math.min(4, Math.floor((frame + 1) / 30) + 1);
-        for (let i = 0; i < revealedPlayers; i++) {
-            drawPlayerCards(i, playerCards[i]);
+        const playerAngles = [-Math.PI/3, Math.PI/6, Math.PI/2, 5*Math.PI/6];
+        for (let i = 0; i < 4; i++) {
+            const playerRevealStart = i * revealFrames;
+            const playerRevealEnd = (i + 1) * revealFrames;
+            let revealProgress = 0;
+
+            if (frame >= playerRevealStart && frame < playerRevealEnd) {
+                revealProgress = (frame - playerRevealStart) / revealFrames;
+            } else if (frame >= playerRevealEnd) {
+                revealProgress = 1;
+            }
+
+            drawPlayer(i, playerCards[i], playerAngles[i], revealProgress);
         }
 
         frame++;
@@ -92,3 +129,6 @@ function animateShowdown() {
 
 // Start the animation
 animateShowdown();
+
+
+
