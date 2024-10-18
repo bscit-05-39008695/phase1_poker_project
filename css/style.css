@@ -1,0 +1,80 @@
+body {
+    background-color: #f0f0f0;
+}
+
+#step2-container {
+    margin-top: 50px;
+}
+
+#table-container {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    background-color: rgb(122, 167, 122);
+    border-radius: 50%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dealer {
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    background-color: red;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.player {
+    width: 50px;
+    height: 70px; 
+    position: absolute;
+    text-align: center;
+}
+
+
+.player-1 {
+    top: 15%; 
+    left: 50%;
+    transform: translate(-50%, -100%); 
+}
+
+.player-2 {
+    right: 10%; 
+    top: 50%;
+    transform: translate(100%, -50%);
+}
+
+.player-3 {
+    bottom: 15%; 
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.player-4 {
+    left: 10%; 
+    top: 50%;
+    transform: translate(-100%, -50%);
+}
+
+
+.card {
+    width: 60px;
+    height: 90px;
+    background-color: white;
+    border: 2px solid rgb(238, 234, 234);
+    border-radius: 8px;
+    text-align: center;
+    margin: 5px;
+    color: rgb(223, 170, 170);
+}
+
+.card-value {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.card-suit {
+    font-size: 20px;
+}
