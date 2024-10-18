@@ -1,5 +1,5 @@
 const step5 = document.getElementById("step5");
-const canvas = document.getElementById('pokerCanvas');
+const canvas = document.getElementById('pokerCanvas5');
 const ctx = canvas.getContext('2d');
 
 const CARD_WIDTH = 50;
