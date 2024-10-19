@@ -1,178 +1,99 @@
-const canvas = document.getElementById('pokerCanvas');
-const ctx = canvas.getContext('2d');
-
-const CARD_WIDTH = 50;
-const CARD_HEIGHT = 70;
-const TABLE_CENTER_X = 400;
-const TABLE_CENTER_Y = 300;
-const TABLE_RADIUS_X = 350;
-const TABLE_RADIUS_Y = 250;
-const ANIMATION_DURATION = 500; 
-
-let deck = [];
-let dealingInProgress = false;
-const players = [[], [], [], []];
-const communityCards = []; // 3 community cards
-
+// Create deck of cards
 function createDeck() {
-    const suits = ['♠', '♥', '♦', '♣'];
-    const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-    deck = [];
+    const suits = ['♥', '♦', '♣', '♠'];
+    const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+    const deck = [];
+
     for (let suit of suits) {
         for (let value of values) {
-            deck.push({ suit, value });
+            deck.push({ value, suit });
         }
     }
-    shuffleDeck();
+    return shuffleDeck(deck);
 }
 
-function shuffleDeck() {
+// Shuffle deck
+function shuffleDeck(deck) {
     for (let i = deck.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [deck[i], deck[j]] = [deck[j], deck[i]];
     }
+    return deck;
 }
 
-function drawCard(x, y, card) {
-    ctx.fillStyle = 'white';
-    ctx.fillRect(x, y, CARD_WIDTH, CARD_HEIGHT);
-    ctx.strokeStyle = 'black';
-    ctx.strokeRect(x, y, CARD_WIDTH, CARD_HEIGHT);
+// Create card element
+function createCard(value, suit, hidden = false) {
+    const card = document.createElement('div');
+    card.className = `card${hidden ? ' hidden' : ''}`;
     
-    ctx.fillStyle = 'red';
-    ctx.font = '20px Arial';
-    ctx.fillText(card.value, x + 10, y + 25);
-    ctx.fillText(card.suit, x + 10, y + 50);
+    if (!hidden) {
+        const valueDiv = document.createElement('div');
+        valueDiv.className = 'card-value';
+        valueDiv.textContent = value;
+
+        const suitDiv = document.createElement('div');
+        suitDiv.className = `card-suit${['♥', '♦'].includes(suit) ? ' red' : ''}`;
+        suitDiv.textContent = suit;
+
+        card.appendChild(valueDiv);
+        card.appendChild(suitDiv);
+    }
+
+    return card;
 }
 
-function drawStaticTable() {
-    // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    
-    ctx.fillStyle = 'green';
-    ctx.beginPath();
-    ctx.ellipse(TABLE_CENTER_X, TABLE_CENTER_Y, TABLE_RADIUS_X, TABLE_RADIUS_Y, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = 'brown';
-    ctx.lineWidth = 10;
-    ctx.stroke();
-
-    // Draw dealer position
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    ctx.arc(TABLE_CENTER_X, TABLE_CENTER_Y - TABLE_RADIUS_Y + 40, 20, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = 'black';
-    ctx.font = '20px Arial';
-    ctx.fillText('D', TABLE_CENTER_X - 7, TABLE_CENTER_Y - TABLE_RADIUS_Y + 47);
-
-    // Draw player positions with increased gaps
-    const playerPositions = [
-        { x: TABLE_CENTER_X - 200, y: TABLE_CENTER_Y + 80 }, // Player 1
-        { x: TABLE_CENTER_X - 100, y: TABLE_CENTER_Y + 80 }, // Player 2
-        { x: TABLE_CENTER_X + 100, y: TABLE_CENTER_Y + 80 }, // Player 3
-        { x: TABLE_CENTER_X + 200, y: TABLE_CENTER_Y + 80 }  // Player 4
-    ];
-
-    playerPositions.forEach((pos, index) => {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.beginPath();
-        ctx.arc(pos.x, pos.y, 30, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = 'white';
-        ctx.font = '16px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(`Player ${index + 1}`, pos.x, pos.y + 5);
-        ctx.textAlign = 'left';
-    });
+// Sleep function for animations
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function drawCommunityCards() {
-    const startX = TABLE_CENTER_X - 75; // Adjust for three cards
-    const startY = TABLE_CENTER_Y - 40;
-    communityCards.forEach((card, index) => {
-        drawCard(startX + index * 60, startY, card);
-    });
-}
-
-function drawPlayerCards() {
-    const playerPositions = [
-        { x: TABLE_CENTER_X - 200, y: TABLE_CENTER_Y + 80 },
-        { x: TABLE_CENTER_X - 100, y: TABLE_CENTER_Y + 80 },
-        { x: TABLE_CENTER_X + 100, y: TABLE_CENTER_Y + 80 },
-        { x: TABLE_CENTER_X + 200, y: TABLE_CENTER_Y + 80 }
-    ];
-
-    players.forEach((playerCards, pIndex) => {
-        const startX = playerPositions[pIndex].x; // Spacing between players
-        const startY = playerPositions[pIndex].y; // Players' card position
-        playerCards.forEach((card, cIndex) => {
-            drawCard(startX + cIndex * 60, startY, card);
-        });
-    });
-}
-
-function animateCard(startX, startY, endX, endY) {
-    return new Promise(resolve => {
-        const startTime = performance.now();
-        
-        function animate(currentTime) {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
-            
-            const currentX = startX + (endX - startX) * progress;
-            const currentY = startY + (endY - startY) * progress;
-
-            drawStaticTable();
-            drawCommunityCards();
-            drawPlayerCards();
-            drawCard(currentX, currentY, { value: '', suit: '' }); // Draw temporary card
-
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-            } else {
-                resolve();
-            }
-        }
-
-        requestAnimationFrame(animate);
-    });
-}
-
+// Deal cards function
 async function dealCards() {
-    if (dealingInProgress) return;
-    dealingInProgress = true;
+    const deck = createDeck();
+    const dealingSpeed = 500; // milliseconds between each card
 
-    createDeck();
-    
     // Deal 2 cards to each player
     for (let round = 0; round < 2; round++) {
-        for (let playerIndex = 0; playerIndex < players.length; playerIndex++) {
+        for (let player = 1; player <= 4; player++) {
             const card = deck.pop();
-            players[playerIndex].push(card);
-            const startX = TABLE_CENTER_X;
-            const startY = TABLE_CENTER_Y - TABLE_RADIUS_Y + 40; // Dealer position
-            const endX = TABLE_CENTER_X - 200 + playerIndex * 100 + (round * 60); // Adjust for each player's card (increased gaps)
-            const endY = TABLE_CENTER_Y + 80; // Players' card position
-            await animateCard(startX, startY, endX, endY);
+            const playerCards = document.querySelector(`.player${player} .player-cards`);
+            const cardElement = createCard(card.value, card.suit);
+            cardElement.classList.add('dealing');
+            playerCards.appendChild(cardElement);
+            await sleep(dealingSpeed);
         }
     }
 
-    // Deal 3 community cards
-    for (let communityIndex = 0; communityIndex < 3; communityIndex++) {
+    // Deal 3 community cards (flop)
+    await sleep(dealingSpeed);
+    const communityCards = document.querySelector('.community-cards');
+    
+    // First deal them face down
+    for (let i = 0; i < 3; i++) {
         const card = deck.pop();
-        communityCards.push(card);
-        const startX = TABLE_CENTER_X;
-        const startY = TABLE_CENTER_Y - TABLE_RADIUS_Y + 40; // Dealer position
-        const endX = TABLE_CENTER_X - 75 + communityIndex * 60; // Community card position
-        const endY = TABLE_CENTER_Y - 40; // Community card position
-        await animateCard(startX, startY, endX, endY);
+        const cardElement = createCard(null, null, true);
+        cardElement.classList.add('dealing');
+        communityCards.appendChild(cardElement);
+        await sleep(dealingSpeed);
     }
 
-    dealingInProgress = false;
+    // After 2 seconds, reveal the flop
+    await sleep(2000);
+    const hiddenCards = communityCards.querySelectorAll('.card.hidden');
+    for (let i = 0; i < 3; i++) {
+        const card = deck.pop();
+        const newCard = createCard(card.value, card.suit);
+        newCard.classList.add('dealing');
+        hiddenCards[i].replaceWith(newCard);
+        await sleep(dealingSpeed);
+    }
 }
 
-// Start dealing cards after 2 seconds
-setTimeout(dealCards, 2000);
-
+// Start dealing when page loads
+window.onload = function() {
+    const step2 = document.getElementById('step2');
+    if (step2) {
+        // Start dealing after a 2-second delay
+        setTimeout(() => dealCards(), 2000);
+    }
+};
