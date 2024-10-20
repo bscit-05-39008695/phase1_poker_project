@@ -1,11 +1,17 @@
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     "liveServer.settings.port": 5501
 =======
     "livePreview.defaultPreviewPath": "/index.html"
 >>>>>>> origin/aron
 =======
     "liveServer.settings.port": 5501
+=======
+    "livePreview.defaultPreviewPath": "/index.html"
+=======
+    "liveServer.settings.port": 5501
+>>>>>>> origin/aron
 >>>>>>> origin/augustine
 }
