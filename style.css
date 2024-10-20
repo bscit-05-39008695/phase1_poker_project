@@ -1,0 +1,26 @@
+body {
+    background-color: #2e7d32; /* Dark green background for the table */
+    color: white; /* Text color for better contrast */
+    font-family: Arial, sans-serif; /* Added font for better readability */
+}
+
+.action-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.action-button {
+    background-color: #ff5733; /* Button color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding */
+    margin: 0 10px; /* Spacing between buttons */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.action-button:hover {
+    background-color: #c0392b; /* Darker color on hover */
+}

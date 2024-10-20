@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+/*<<<<<<< HEAD*/
 .poker-container {
     display: flex;
     align-items: flex-start;
@@ -84,7 +84,8 @@
     font-style: italic;
     color: white;
     text-align: center;
-=======
+}
+/*=======*/
 /* Add these styles to your style.css file */
 
 #poker-table-container {
@@ -233,5 +234,5 @@
 @keyframes dealerGlow {
     0%, 100% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.8); }
     50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
->>>>>>> origin/Sayfudin
+/*>>>>>>> origin/Sayfudin*/
 }
