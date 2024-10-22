@@ -1,38 +1,39 @@
 function continuousRiverAnimation() {
-    const step4Element = document.getElementById('step4');
+    const step4Element = document.getElementById('step4Aron'); // Updated ID
     let container, pokerTable, communityCardsElement, burnPile, playerHandElement, statusText, descriptionText;
 
     function initializeElements() {
-        const pokercanvasElement = document.getElementById('pokercanvas');
+        const pokercanvasElement = document.getElementById('pokercanvasAron'); // Updated ID
         pokercanvasElement.innerHTML = ''; // Clear previous content
     
         // Create poker table container
         pokerTable = document.createElement('div');
-        pokerTable.className = 'poker-table';
+        pokerTable.className = 'aron-poker-table'; // Updated class
         pokercanvasElement.appendChild(pokerTable);
     
         // Create and add community cards
         communityCardsElement = document.createElement('div');
-        communityCardsElement.className = 'community-cards';
+        communityCardsElement.className = 'aron-community-cards'; // Updated class
         pokerTable.appendChild(communityCardsElement);
     
         // Create and add burn pile
         burnPile = document.createElement('div');
-        burnPile.className = 'burn-pile';
+        burnPile.className = 'aron-burn-pile'; // Updated class
         burnPile.textContent = 'Burn';
         pokerTable.appendChild(burnPile);
     
         // Create and add player's hand
         playerHandElement = document.createElement('div');
-        playerHandElement.className = 'player-hand';
+        playerHandElement.className = 'aron-player-hand'; // Updated class
         pokerTable.appendChild(playerHandElement);
     
         // Create status text
         statusText = document.createElement('p');
-        statusText.id = 'status-text';
+        statusText.id = 'aron-status-text'; // Updated ID
         pokercanvasElement.appendChild(statusText);
     }
 } 
+
 const suits = ['♠', '♥', '♦', '♣'];
 const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
@@ -57,14 +58,14 @@ function dealCards(deck, numCards) {
 // Function to create a card element
 function createCardElement(card) {
     const cardElement = document.createElement('div');
-    cardElement.className = 'card';
+    cardElement.className = 'aron-card'; // Updated class
     
     const valueSpan = document.createElement('span');
-    valueSpan.className = 'card-value';
+    valueSpan.className = 'aron-card-value'; // Updated class
     valueSpan.textContent = card.slice(0, -1);
     
     const suitSpan = document.createElement('span');
-    suitSpan.className = 'card-suit';
+    suitSpan.className = 'aron-card-suit'; // Updated class
     suitSpan.textContent = card.slice(-1);
     
     if (card.slice(-1) === '♥' || card.slice(-1) === '♦') {
@@ -83,7 +84,7 @@ shuffleDeck(deck);
 
 // Function to animate the river card continuously
 function continuousRiverAnimation() {
-    const step4Element = document.getElementById('step4');
+    const step4Element = document.getElementById('step4Aron'); // Updated ID
     let pokerTable, communityCardsElement, burnPile, playerHandElement, statusText;
 
     function initializeElements() {
@@ -91,28 +92,28 @@ function continuousRiverAnimation() {
 
         // Create poker table container
         pokerTable = document.createElement('div');
-        pokerTable.className = 'poker-table';
+        pokerTable.className = 'aron-poker-table'; // Updated class
         step4Element.appendChild(pokerTable);
 
         // Create and add community cards
         communityCardsElement = document.createElement('div');
-        communityCardsElement.className = 'community-cards';
+        communityCardsElement.className = 'aron-community-cards'; // Updated class
         pokerTable.appendChild(communityCardsElement);
 
         // Create and add burn pile
         burnPile = document.createElement('div');
-        burnPile.className = 'burn-pile';
+        burnPile.className = 'aron-burn-pile'; // Updated class
         burnPile.textContent = 'Burn';
         pokerTable.appendChild(burnPile);
 
         // Create and add player's hand
         playerHandElement = document.createElement('div');
-        playerHandElement.className = 'player-hand';
+        playerHandElement.className = 'aron-player-hand'; // Updated class
         pokerTable.appendChild(playerHandElement);
 
         // Create status text
         statusText = document.createElement('p');
-        statusText.id = 'status-text';
+        statusText.id = 'aron-status-text'; // Updated ID
         step4Element.appendChild(statusText);
     }
 

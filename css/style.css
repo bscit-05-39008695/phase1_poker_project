@@ -1,12 +1,11 @@
-/*<<<<<<< HEAD*/
-.poker-container {
+.aron-poker-container {
     display: flex;
     align-items: flex-start;
     max-width: 1000px;
     margin: 0 auto;
 }
 
-.poker-table {
+.aron-poker-table {
     background-color: #1a6e37;
     border-radius: 20px;
     padding: 50px;
@@ -21,7 +20,7 @@
     margin-bottom: 0px;
 }
 
-.description-text {
+.aron-description-text {
     flex: 1;
     background-color: #f0f0f0;
     padding: 20px;
@@ -30,7 +29,7 @@
     line-height: 1.6;
 }
 
-.card {
+.aron-card {
     width: 60px;
     height: 90px;
     background-color: white;
@@ -46,26 +45,26 @@
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
 }
 
-.card.red {
+.aron-card.red {
     color: red;
 }
 
-.card-value {
+.aron-card-value {
     font-size: 20px;
 }
 
-.card-suit {
+.aron-card-suit {
     font-size: 24px;
 }
 
-.community-cards, .player-hand {
+.aron-community-cards, .aron-player-hand {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
     flex-wrap: wrap;
 }
 
-.burn-pile {
+.aron-burn-pile {
     width: 60px;
     height: 90px;
     background-color: #ddd;
@@ -79,7 +78,7 @@
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
 }
 
-#status-text {
+#aron-status-text {
     margin-top: 20px;
     font-style: italic;
     color: white;
