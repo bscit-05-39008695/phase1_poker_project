@@ -3,51 +3,36 @@ function continuousRiverAnimation() {
     let container, pokerTable, communityCardsElement, burnPile, playerHandElement, statusText, descriptionText;
 
     function initializeElements() {
-        step4Element.innerHTML = ''; // Clear previous content
-
-        // Create container for poker table and description
-        container = document.createElement('div');
-        container.className = 'poker-container';
-        step4Element.appendChild(container);
-
+        const pokercanvasElement = document.getElementById('pokercanvas');
+        pokercanvasElement.innerHTML = ''; // Clear previous content
+    
         // Create poker table container
         pokerTable = document.createElement('div');
         pokerTable.className = 'poker-table';
-        container.appendChild(pokerTable);
-
+        pokercanvasElement.appendChild(pokerTable);
+    
         // Create and add community cards
         communityCardsElement = document.createElement('div');
         communityCardsElement.className = 'community-cards';
         pokerTable.appendChild(communityCardsElement);
-
+    
         // Create and add burn pile
         burnPile = document.createElement('div');
         burnPile.className = 'burn-pile';
         burnPile.textContent = 'Burn';
         pokerTable.appendChild(burnPile);
-
+    
         // Create and add player's hand
         playerHandElement = document.createElement('div');
         playerHandElement.className = 'player-hand';
         pokerTable.appendChild(playerHandElement);
-
+    
         // Create status text
         statusText = document.createElement('p');
         statusText.id = 'status-text';
-        pokerTable.appendChild(statusText);
-
-        // Create description text
-        descriptionText = document.createElement('div');
-        descriptionText.className = 'description-text';
-        descriptionText.innerHTML = `
-            <p>After the dealer "burns" the top card on the deck, they'll put 1 last card face up next to the "turn" card. This final card is called the "river." Check your hand and the community cards to decide on your best 5-card hand. Then, bet, call, or fold.[6]</p>
-            <p>* If the rules allow it, you may be able to exchange your hand 1 final time before or after betting. However, this isn't common in professional games.</p>
-        `;
-        container.appendChild(descriptionText);
+        pokercanvasElement.appendChild(statusText);
     }
-
-}
-
+} 
 const suits = ['♠', '♥', '♦', '♣'];
 const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
