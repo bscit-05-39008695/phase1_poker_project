@@ -1,4 +1,4 @@
-const canvas = document.getElementById('pokerCanvas5');
+const canvas = document.getElementById('pokerCanvas5Meso');
 const ctx = canvas.getContext('2d');
 
 const CARD_WIDTH = 50;
