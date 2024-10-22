@@ -3,20 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Texas Hold'em Poker</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/w3.css">
 </head>
 <body class="w3-container">
-<div class="w3-pqnel w3-red">
-    <p>Step 1</p>
-    <p>Pre-Flop</p>
-</div>
-<div>
-    <p>This is the initial betting round, which occurs after players have been dealt their two hole cards (face down). Players decide whether to fold, call, or raise based on the strength of their cards.</p>
-</div>
-<div>
-        <canvas id="pokerCanvas" width="800" height="600"></canvas>
-</div>   
+    <div style="display: flex; align-items: center; justify-content: space-between" class="w3-card w3-padding-16 w3-margin">
+        <h1 class="thick">WELCOME TO POKER: Texas Hold'em</h1>
+    </div>
+    <div class="w3-panel w3 leftbar w3-light-grey">
+        <p class="w3-xlarge w3-serif"><i>About</i></p>
+        <p>Texas hold 'em is a popular poker variant where two cards are dealt face down to each player, and five community cards are dealt face up.</p>
+        <p>Here are the winning poker hands, from highest to lowest:</p>
+        <img src="https://www.wikihow.com/images/thumb/6/65/Play-Poker-Step-1-Version-6.jpg/v4-373px-Play-Poker-Step-1-Version-6.jpg.webp" alt="poker winning hands">
+    </div>
+    <div id="nextStepAron" class="w3-panel w3-red">
+        <p>Step 4</p>
+        <p>River</p>
+    </div>
+    <div> 
+        <p>Examine the "river" card and decide on the hand you'll play. After the dealer "burns" the top card on the deck, they'll put 1 last card face up next to the “turn” card. This final card is called the “river.” Check your hand and the community cards to decide on your best 5-card hand. Then, bet, call, or fold.</p>
+        <p>If the rules allow it, you may be able to exchange your hand 1 final time before or after betting. However, this isn’t common in professional games.</p>
+    </div>
+    <div id="step4Aron" class="w3-panel w3-white"></div>
+    
+    <script src="./js/aron.js"></script>
+    
+    </div>
+    
+    
+    
+    <script src="./js/aron.js"></script>
 </body>
-<script src="./js/paula.js"></script>
 </html>
